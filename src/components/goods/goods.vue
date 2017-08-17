@@ -38,7 +38,7 @@
       </ul>
     </div>
     <shopcart ref="shopcart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
-    <food :food="selectedFood"></food>
+    <food :food="selectedFood" ref="food"></food>
   </div>
 </template>
 
@@ -123,9 +123,9 @@
         if (!event._constructed) {
           return
         }
-        // this.selectedFood = food
+        this.selectedFood = food
         console.log(food);
-        // this.$refs.food.show();
+        this.$refs.food.show();
       }
     },
     components: {
