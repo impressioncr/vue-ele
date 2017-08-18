@@ -18,11 +18,18 @@
             <span class="now">￥{{food.price}}</span>
             <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
           </div>
+          <div class="cartcontrol-wrapper">
+            <cart @add="addFood" :food="food"></cart>
+          </div>
+          <transition name="fade">
+            <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food===0">加入购物车</div>
+          </transition>
         </div>
-        <div class="cartcontrol-wrapper">
-          <cart :food="food"></cart>
+        <split v-show="food.info"></split>
+        <div class="info" v-show="food.info">
+          <div class="title">商品信息</div>
+          <p class="text" >{{ food.info }}</p>
         </div>
-        <div class="buy" v-show="!food.count || food===0"></div>
       </div>
     </div>
   </transition>
@@ -31,7 +38,8 @@
 <script>
   import BScroll from 'better-scroll'
   import cart from '../cart/cart'
-
+  import split from '../split/split'
+  import Vue from 'vue'
   export default {
     props:{
       food:{
@@ -58,10 +66,21 @@
       },
       hide() {
         this.showFlag = false
-      }
+      },
+      addFirst(event) {
+        if (!event._constructed) {
+          return
+        }
+        this.$emit('add', event.target)
+        Vue.set(this.food, 'count', 1)
+      },
+      addFood(target) {
+        this.$emit('add', target)
+      },
     },
     components: {
-      cart
+      cart,
+      split
     }
   }
 </script>
@@ -131,6 +150,40 @@
           text-decoration: line-through
           font-size: 10px
           color: rgb(147,153,159)
-    .cartcontrol-wrapper
+      .cartcontrol-wrapper
+        position absolute
+        right 12px
+        bottom 12px
+      .buy
+        position absolute
+        right 18px
+        bottom 18px
+        z-index 10
+        height 24px
+        line-height @height
+        padding 0 12px
+        box-sizing border-box
+        font-size 10px
+        border-radius 12px
+        color #fff
+        background rgb(0, 160, 220)
+        opacity 1
+        &.fade-enter-active, &.fade-leave-active
+          transition all 0.2s
+        &.fade-enter, &.fade-leave-active
+          opacity 0
+          z-index -1
+    .info
+      padding 18px
+      .title
+        line-height 17px
+        margin-bottom 6px
+        font-size 14px
+        color rgb(7, 17, 27)
+      .text
+        font-size 12px
+        padding 0 8px
+        line-height 2*@font-size
+        color rgb(77, 85, 93)
 
 </style>
