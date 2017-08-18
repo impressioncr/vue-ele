@@ -30,16 +30,30 @@
           <div class="title">商品信息</div>
           <p class="text" >{{ food.info }}</p>
         </div>
+        <split></split>
+        <div class="rating">
+          <h1 class="title">商品评价</h1>
+          <ratingselect
+            :selectType="selectType" :onlyContent="onlyContent" :desc="desc" :ratings="food.ratings"
+          >
+          </ratingselect>
+        </div>
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+  const POSITIVE = 0
+  const NEGATIVE = 1
+  const ALL = 2
+
   import BScroll from 'better-scroll'
   import cart from '../cart/cart'
   import split from '../split/split'
+  import ratingselect from '../ratingselect/ratingselect'
   import Vue from 'vue'
+
   export default {
     props:{
       food:{
@@ -49,11 +63,20 @@
     data() {
       return {
         showFlag: false,
+        selectType: ALL,
+        onlyContent: true,
+        desc: {
+          all: '全部',
+          position: '推荐',
+          negative: '吐槽'
+        }
       }
     },
     methods: {
       show() {
         this.showFlag = true
+        this.selectType = ALL
+        this.onlyContent = true
         this.$nextTick(() => {
           if(!this.scroll) {
             this.scroll = new BScroll(this.$refs.food, {
@@ -80,7 +103,8 @@
     },
     components: {
       cart,
-      split
+      split,
+      ratingselect
     }
   }
 </script>
