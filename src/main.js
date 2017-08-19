@@ -13,7 +13,7 @@ Vue.config.productionTip = false
 Vue.use(VueResource)
 Vue.use(VueRouter)
 
-router.push("/goods")
+// router.push("/goods")
 
 /* eslint-disable no-new */
 new Vue({
